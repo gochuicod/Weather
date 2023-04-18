@@ -1,0 +1,63 @@
+/* Inputs */
+
+input[type="search"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Cursors */
+
+.pointer {
+    cursor: pointer;
+}
+
+/* Texts */
+
+.text-transform-capitalize {
+    text-transform: capitalize;
+}
+
+/* Browser Functions */
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Fonts */
+
+.fs-7 { font-size: 0.9em; }
+.fs-8 { font-size: 0.8em; }
+
+/* Animations */
+
+@keyframes slide-from-top {
+    0% { transform: translateY(-25%); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes zoom-in {
+    0% { transform: scale(0,0); }
+    100% { transform: scale(1,1); }
+}
+
+@keyframes expand {
+    0% { width: 0% }
+    100% { width: 100% }
+}
+
+.slide-from-top {
+    animation: slide-from-top 0.5s ease;
+}
+
+.zoom-in {
+    animation: zoom-in 0.5s ease;
+}
+
+.expand {
+    animation: expand 0.5s ease;
+}
