@@ -36,7 +36,7 @@ const App = () => {
             
             if(!weatherData.message){
                 const {lat,lon} = weatherData.coord
-                const airPollutionData = await HandleFetchData(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+                const airPollutionData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`)
                 setAirPollutionData(airPollutionData)
 
                 const HourlyForecastData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
