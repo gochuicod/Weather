@@ -51,13 +51,13 @@ input[type="search"]:focus {
 }
 
 .slide-from-top {
-    animation: slide-from-top 0.5s ease;
+    animation: slide-from-top 1.5s ease;
 }
 
 .zoom-in {
-    animation: zoom-in 0.5s ease;
+    animation: zoom-in 1.5s ease;
 }
 
 .expand {
-    animation: expand 0.5s ease;
+    animation: expand 1.5s ease;
 }

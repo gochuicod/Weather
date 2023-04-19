@@ -7,7 +7,7 @@ const HourlyForecast = props => {
     return (
         <div>
             <div className="d-flex flex-row justify-content-center mt-5 mb-3 zoom-in">
-                <span>Five Day Forecast</span>
+                <span>3-hour Step Forecast</span>
             </div>
             {
                 data.map((item,index) => {

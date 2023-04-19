@@ -20,36 +20,50 @@ const App = () => {
 
     const isMounted = useRef(false)
     const [isPressedEnter, setIsPressedEnter] = useState(false)
+    const [isButtonClicked, setIsButtonClicked] = useState(false)
 
     const handleOnChange = event => setQuery(event.target.value)
     const handleKeyDown = event => {
         if(event.key == "Enter") {
-            setData(query)
+            event.target.blur()
+            setData(query.trim())
             setIsPressedEnter(true)
+            setQuery("")
         }
     }
 
-    useEffect(() => {
-        const fetchData = async (query) => {
-            const weatherData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${apiKey}`)
-            setWeatherData(weatherData)
-            
-            if(!weatherData.message){
-                const {lat,lon} = weatherData.coord
-                const airPollutionData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`)
-                setAirPollutionData(airPollutionData)
+    const handleOnClick = event => {
+        event.preventDefault()
+        event.target.blur()
+        setData(query.trim())
+        setQuery("")
+    }
 
-                const HourlyForecastData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
-                setHourlyForecastData(HourlyForecastData)
+    useEffect(() => {
+        const fetchData = async () => {
+            if(data != null){
+                const weatherData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/weather?q=${data}&units=metric&appid=${apiKey}`)
+                setWeatherData(weatherData)
+                
+                if(!weatherData.message){
+                    const {lat,lon} = weatherData.coord
+                    const airPollutionData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+                    setAirPollutionData(airPollutionData)
+    
+                    const HourlyForecastData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
+                    setHourlyForecastData(HourlyForecastData)
+                }
             }
         }
 
-        if(!isMounted.current && isPressedEnter == true){
+        if(!isMounted.current && (!isPressedEnter || !isButtonClicked)){
             isMounted.current = true;
-            fetchData(data)
+            fetchData()
         }
-
+        
         isMounted.current = false
+        setIsButtonClicked(false)
+        setIsPressedEnter(false)
     },[data,apiKey])
 
     return (
@@ -60,7 +74,7 @@ const App = () => {
                 <div className="input-group w-75 align-items-center">
                     <i className="bi bi-geo-alt fs-4 text-secondary me-1" />
                     <input className='form-control border-0' type="search" value={query} onChange={handleOnChange} onKeyDown={handleKeyDown} placeholder='Search weather' />
-                    <button className='btn'>
+                    <button className='btn' onClick={handleOnClick}>
                         <i className="bi bi-search text-secondary" />
                     </button>
                 </div>
@@ -68,13 +82,14 @@ const App = () => {
 
             <section>
                 {
-                    isPressedEnter == true && !weatherData.message ?
+                    data == null ? null : (!isButtonClicked || !isPressedEnter) && weatherData.message ?
+                    <div className="d-flex justify-content-center text-danger text-transform-capitalize">{weatherData.message}</div> :
                     <div>
                         <CurrentWeather data={weatherData} />
                         <CurrentAirPollution data={airPollutionData} />
                         <HourlyForecast data={hourlyForecastData} />
                     </div>
-                    : <div className="d-flex justify-content-center text-danger text-transform-capitalize">{weatherData.message}</div>
+                    
                 }
             </section>
         </main>

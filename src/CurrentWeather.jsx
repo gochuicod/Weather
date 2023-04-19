@@ -4,7 +4,7 @@ const CurrentWeather = props => {
     const data = props.data
 
     return (
-        <div className="d-flex justify-content-evenly shadow rounded rounded-4 slide-from-top mb-3 fs-7 py-1">
+        <div className={`d-flex justify-content-evenly shadow rounded rounded-4 slide-from-top mb-3 fs-7 py-1`}>
             <div className="d-flex flex-row justify-content-center align-items-center">
                 <img src={`https://openweathermap.org/img/wn/${data.weather?.[0]?.icon}@2x.png`} />
                 <div className="d-flex flex-column">
