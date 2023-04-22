@@ -1,12 +1,14 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import './Custom.css'
+import './css/Custom.css'
 import { useEffect, useState, useRef } from 'react'
-import ProjectTitle from './ProjectTitle'
-import CurrentWeather from './CurrentWeather'
-import HandleFetchData from './HandleFetchData'
-import CurrentAirPollution from './CurrentAirPollution'
-import HourlyForecast from './HourlyForecast'
+
+import ProjectTitle from './Components/ProjectTitle'
+import CurrentWeather from './Components/CurrentWeather'
+import HandleFetchData from './Components/HandleFetchData'
+import CurrentAirPollution from './Components/CurrentAirPollution'
+import HourlyForecast from './Components/HourlyForecast'
+
+import { ActionIcon, Box, Flex, Group, TextInput, Text, Container, Transition, Button, Paper } from '@mantine/core'
+import { IconMapPin, IconSearch } from '@tabler/icons-react'
 
 const App = () => {
     const apiKey = "925f99c7a911db368626814750c8bc61"
@@ -67,32 +69,73 @@ const App = () => {
     },[data,apiKey])
 
     return (
-        <main className='container'>
-            <ProjectTitle name="Weather" source="openweathermap" />
+        <div>
+            <Box my={'md'} className='zoom-in'>
+                <ProjectTitle name="Weather" source="openweathermap"/>
+            </Box>
 
-            <section className='d-flex justify-content-center mb-4 expand'>
-                <div className="input-group w-75 align-items-center">
-                    <i className="bi bi-geo-alt fs-4 text-secondary me-1" />
-                    <input className='form-control border-0' type="search" value={query} onChange={handleOnChange} onKeyDown={handleKeyDown} placeholder='Search weather' />
-                    <button className='btn' onClick={handleOnClick}>
-                        <i className="bi bi-search text-secondary" />
-                    </button>
-                </div>
-            </section>
+            <Box mb={'xl'}>
+                <Container
+                    size={'md'}
+                >
+                    <Flex
+                        justify={"center"}
+                        align={"center"}
+                        gap={"lg"}
+                    >
+                        <Group>
+                            <TextInput
+                                className='expand'
+                                variant='unstyled'
+                                value={query}
+                                onChange={handleOnChange}
+                                onKeyDown={handleKeyDown}
+                                icon={<IconMapPin/>}
+                                placeholder='Search weather'
+                                radius={'lg'}
+                                rightSection={
+                                    <ActionIcon
+                                        onClick={handleOnClick}
+                                        c={'dark.0'}
+                                        sx={{
+                                            '&': { backgroundColor: 'transparent' },
+                                            '&:hover': { backgroundColor: 'transparent' }
+                                        }}
+                                    >
+                                        <IconSearch/>
+                                    </ActionIcon>
+                                }
+                            />
+                        </Group>
+                    </Flex>
+                </Container>
+            </Box>
 
-            <section>
+            <Box>
                 {
                     data == null ? null : (!isButtonClicked || !isPressedEnter) && weatherData.message ?
-                    <div className="d-flex justify-content-center text-danger text-transform-capitalize">{weatherData.message}</div> :
-                    <div>
-                        <CurrentWeather data={weatherData} />
-                        <CurrentAirPollution data={airPollutionData} />
-                        <HourlyForecast data={hourlyForecastData} />
-                    </div>
-                    
+                    <Flex
+                        c={'red'}
+                        justify={'center'}
+                        align={'center'}
+                    >
+                        <Text>{weatherData.message}</Text>
+                    </Flex>
+                    :
+                    <Box>
+                        <Box>
+                            <CurrentWeather data={weatherData}/>
+                        </Box>
+                        <Box my={'xl'}>
+                            <CurrentAirPollution data={airPollutionData}/>
+                        </Box>
+                        <Box>
+                            <HourlyForecast data={hourlyForecastData}></HourlyForecast>
+                        </Box>
+                    </Box>
                 }
-            </section>
-        </main>
+            </Box>
+        </div>
     )
 }
 
