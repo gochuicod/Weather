@@ -1,11 +1,11 @@
 import './css/Custom.css'
 import { useEffect, useState, useRef } from 'react'
 
-import ProjectTitle from './Components/ProjectTitle'
-import CurrentWeather from './Components/CurrentWeather'
-import HandleFetchData from './Components/HandleFetchData'
-import CurrentAirPollution from './Components/CurrentAirPollution'
-import HourlyForecast from './Components/HourlyForecast'
+import ProjectTitle from './components/ProjectTitle'
+import CurrentWeather from './components/CurrentWeather'
+import HandleFetchData from './components/HandleFetchData'
+import CurrentAirPollution from './components/CurrentAirPollution'
+import HourlyForecast from './components/HourlyForecast'
 
 import { ActionIcon, Box, Flex, Group, TextInput, Text, Container, Transition, Button, Paper } from '@mantine/core'
 import { IconMapPin, IconSearch } from '@tabler/icons-react'
@@ -98,8 +98,8 @@ const App = () => {
                                         onClick={handleOnClick}
                                         c={'dark.0'}
                                         sx={{
-                                            '&': { backgroundColor: 'transparent' },
-                                            '&:hover': { backgroundColor: 'transparent' }
+                                            '&': { backgroundColor: '#fff' },
+                                            '&:hover': { backgroundColor: '#fff' }
                                         }}
                                     >
                                         <IconSearch/>
