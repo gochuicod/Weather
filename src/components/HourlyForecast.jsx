@@ -12,13 +12,13 @@ const HourlyForecast = props => {
                 data.map((item,index) => {
                     return (
                         <Container
-                            className="slide-from-top"
+                            className="slide-from-top card-scale-on-hover"
                             key={index}
                             size={'md'}
                             fz={'xs'}
                             mb={'lg'}
                             sx={{
-                                boxShadow: '10px 15px 15px rgba(221,221,221,0.5)',
+                                boxShadow: '5px 5px 10px rgba(220,220,220,0.5)',
                                 borderRadius: 24
                             }}
                         >

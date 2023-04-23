@@ -1,6 +1,7 @@
 import { Text } from "@mantine/core"
 
 const Utilities = {
+    apiKey: "925f99c7a911db368626814750c8bc61",
     handleAtmosphericPressure: value => value < 1013 ? "Low" : "High",
     handleLocalTime: value => {
         const time = new Date(value*1000).toLocaleTimeString()

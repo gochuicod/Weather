@@ -6,39 +6,40 @@ import CurrentWeather from './components/CurrentWeather'
 import HandleFetchData from './components/HandleFetchData'
 import CurrentAirPollution from './components/CurrentAirPollution'
 import HourlyForecast from './components/HourlyForecast'
+import Utilities from './components/Utilities'
 
-import { ActionIcon, Box, Flex, Group, TextInput, Text, Container, Transition, Button, Paper } from '@mantine/core'
-import { IconMapPin, IconSearch } from '@tabler/icons-react'
+import { ActionIcon, Box, Flex, Group, TextInput, Text, Container, Loader } from '@mantine/core'
+import { IconCloudSearch, IconMapPin } from '@tabler/icons-react'
 
 const App = () => {
-    const apiKey = "925f99c7a911db368626814750c8bc61"
-    
-    const [query, setQuery] = useState('')
+    const apiKey = Utilities.apiKey
+
     const [data, setData] = useState(null)
+    const inputRef = useRef(null)
 
     const [weatherData, setWeatherData] = useState([])
     const [airPollutionData, setAirPollutionData] = useState([])
     const [hourlyForecastData, setHourlyForecastData] = useState([])
 
-    const isMounted = useRef(false)
     const [isPressedEnter, setIsPressedEnter] = useState(false)
     const [isButtonClicked, setIsButtonClicked] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const handleOnChange = event => setQuery(event.target.value)
     const handleKeyDown = event => {
-        if(event.key == "Enter") {
-            event.target.blur()
-            setData(query.trim())
+        if(event.key == "Enter"){
             setIsPressedEnter(true)
-            setQuery("")
+            event.target.blur()
+            setData(inputRef.current.value.trim())
+            inputRef.current.value = ''
         }
     }
 
     const handleOnClick = event => {
         event.preventDefault()
+        setIsButtonClicked(true)
         event.target.blur()
-        setData(query.trim())
-        setQuery("")
+        setData(inputRef.current.value.trim())
+        inputRef.current.value = ''
     }
 
     useEffect(() => {
@@ -55,21 +56,24 @@ const App = () => {
                     const HourlyForecastData = await HandleFetchData(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
                     setHourlyForecastData(HourlyForecastData)
                 }
+                setIsLoading(false)
             }
         }
 
-        if(!isMounted.current && (!isPressedEnter || !isButtonClicked)){
-            isMounted.current = true;
+        if(isPressedEnter == true || isButtonClicked == true) {
+            setIsLoading(true)
             fetchData()
         }
         
-        isMounted.current = false
         setIsButtonClicked(false)
         setIsPressedEnter(false)
     },[data,apiKey])
 
     return (
-        <div>
+        <Container
+            mt={'lg'}
+            py={'md'}
+        >
             <Box my={'md'} className='zoom-in'>
                 <ProjectTitle name="Weather" source="openweathermap"/>
             </Box>
@@ -87,8 +91,7 @@ const App = () => {
                             <TextInput
                                 className='expand'
                                 variant='unstyled'
-                                value={query}
-                                onChange={handleOnChange}
+                                ref={inputRef}
                                 onKeyDown={handleKeyDown}
                                 icon={<IconMapPin/>}
                                 placeholder='Search weather'
@@ -99,10 +102,10 @@ const App = () => {
                                         c={'dark.0'}
                                         sx={{
                                             '&': { backgroundColor: '#fff' },
-                                            '&:hover': { backgroundColor: '#fff' }
+                                            '&:hover': { backgroundColor: '#fff' },
                                         }}
                                     >
-                                        <IconSearch/>
+                                        <IconCloudSearch/>
                                     </ActionIcon>
                                 }
                             />
@@ -111,17 +114,10 @@ const App = () => {
                 </Container>
             </Box>
 
-            <Box>
+            <Box align={'center'} justify={'center'} >
                 {
-                    data == null ? null : (!isButtonClicked || !isPressedEnter) && weatherData.message ?
-                    <Flex
-                        c={'red'}
-                        justify={'center'}
-                        align={'center'}
-                    >
-                        <Text>{weatherData.message}</Text>
-                    </Flex>
-                    :
+                    isLoading == true ? <Loader mt={'xl'} variant='bars' color='rgba(72,72,74)'/> :
+                    weatherData.cod == 200 ?
                     <Box>
                         <Box>
                             <CurrentWeather data={weatherData}/>
@@ -133,9 +129,18 @@ const App = () => {
                             <HourlyForecast data={hourlyForecastData}></HourlyForecast>
                         </Box>
                     </Box>
+                    : weatherData.cod == '404' || weatherData.cod == '400' ?
+                    <Flex
+                        c={'red'}
+                        justify={'center'}
+                        align={'center'}
+                    >
+                        <Text>{weatherData.message}</Text>
+                    </Flex>
+                    : null
                 }
             </Box>
-        </div>
+        </Container>
     )
 }
 

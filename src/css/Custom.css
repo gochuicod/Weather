@@ -1,22 +1,3 @@
-/* Inputs */
-
-input[type="search"]:focus {
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* Cursors */
-
-.pointer {
-    cursor: pointer;
-}
-
-/* Texts */
-
-.text-transform-capitalize {
-    text-transform: capitalize;
-}
-
 /* Browser Functions */
 
 .unselectable {
@@ -28,11 +9,6 @@ input[type="search"]:focus {
     user-select: none;
 }
 
-/* Fonts */
-
-.fs-7 { font-size: 0.9em; }
-.fs-8 { font-size: 0.8em; }
-
 /* Animations */
 
 @keyframes slide-from-top {
@@ -41,8 +17,8 @@ input[type="search"]:focus {
 }
 
 @keyframes zoom-in {
-    0% { transform: scale(0,0); }
-    100% { transform: scale(1,1); }
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
 }
 
 @keyframes expand {
@@ -50,14 +26,15 @@ input[type="search"]:focus {
     100% { width: 100% }
 }
 
-.slide-from-top {
-    animation: slide-from-top 1.5s ease;
-}
+.slide-from-top { animation: slide-from-top 1.5s ease; }
 
-.zoom-in {
-    animation: zoom-in 1.5s ease;
-}
+.zoom-in { animation: zoom-in 1.5s ease; }
 
-.expand {
-    animation: expand 1.5s ease;
+.expand { animation: expand 1.5s ease; }
+
+/* Transitions */
+
+.card-scale-on-hover:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
 }
